@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  mariadb:
+    build: mariadb/
+    image: mariadb:latest
+    container_nmae: mariadb
+    env_file: .env
+    network:
+     - 
+      
+       
