@@ -7,6 +7,4 @@ COPY tools/script.sh /mariadb.sh
 
 RUN chmod +x /mariadb.sh
 
-EXPOSE 80:80
-
 ENTRYPOINT ["/mariadb.sh"]

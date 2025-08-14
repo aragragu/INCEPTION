@@ -8,25 +8,27 @@ service mariadb start
 sleep 5
 
 #printing some stats
-echo "mariadb DATABASE: ${MYSQL_DB}"
-echo "mariadb USER_NAME: ${MYSQL_USER}"
-echo "Starting to create ${MYSQL_DB} database ..."
+echo "mariadb DATABASE: ${MARIADB_DB}"
+echo "mariadb USER_NAME: ${MARIADB_USER}"
 
+
+
+echo "Starting to create ${MARIADB_DB} database ..."
 #"mariadb" is the CLI of the client to interact with the mariadbd. and in this case it lets us execute SQL statement
 #directly, the -e option tells the client to run the SQL command directly from the CLI.
 
 # (CREATE DATABASE) -> creates a database | (IF NOT EXISTS) -> prevents an error if the data base exists
-mariadb -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB"
+mariadb -e "CREATE DATABASE IF NOT EXISTS $MARIADB_DB"
 
 # (CREATE USER) -> creates a user account in mariadb | (IF NOT EXISTS) -> prevent an error if the user already exists
 # in
-mariadb -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'"
-mariadb -e "GRANT ALL PRIVILEGES ON $MYSQL_DB.* TO '$MYSQL_USER'@'%'"
+mariadb -e "CREATE USER IF NOT EXISTS '$MARIADB_USER'@'%' IDENTIFIED BY '$MARIADB_PASSWORD'"
+mariadb -e "GRANT ALL PRIVILEGES ON $MARIADB_DB.* TO '$MARIADB_USER'@'%'"
 mariadb -e "FLUSH PRIVILEGES"
 
 mysqladmin -u root shutdown
 
-echo "Finished creating \`${MYSQL_DB}\`..."
+echo "Finished creating \`${MARIADB_DB}\`..."
 echo "Starting MariaDB in foreground..."
 
 # Keep MariaDB running in foreground
