@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 RUN apt-get update && apt-get install -y curl php7.4 php-fpm php-mysql mariadb-client
 
-RUN service php7.4-fpm start
+# RUN service php7.4-fpm start
 
 COPY ./tools/script.sh /wordpress.sh
 

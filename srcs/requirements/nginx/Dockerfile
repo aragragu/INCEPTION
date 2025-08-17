@@ -27,11 +27,9 @@ RUN openssl req -new -x509 -newkey rsa:4096 \
 # - `-subj`: Provide all subject info inline (Country, State, City, Org, Unit, Common Name)
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-
 # Replace default Nginx config with our custom config
+COPY ./tools/script.sh /script.sh
+RUN chmod +x script.sh
 
-
-#this is if i wanna access the container from my
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["./script.sh"]
 # Start Nginx in the foreground (required in Docker

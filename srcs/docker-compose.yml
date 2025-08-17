@@ -1,18 +1,26 @@
-version: "3.8"
 services:
   mariadb:
+    image: mariadb:aragragu
     build: ./requirements/mariadb
-    env_file: .env
+    container_name: mariadb
     networks:
       - inception-network
     volumes:
       - mariadb-volume:/var/lib/mysql
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file: .env
   
 
 
   wordpress:
+    image: wordpress:aragragu
     build: ./requirements/wordpress
+    container_name: wordpress
     env_file: .env
     networks:
       - inception-network
@@ -20,13 +28,17 @@ services:
       - wordpress-volume:/var/www/wordpress
     restart: always
     depends_on:
-      - mariadb
+      mariadb:
+          condition: service_healthy
+
   
 
 
 
-  ngnix:
+  nginx:
+    image: ngnix:aragragu
     build: ./requirements/nginx
+    container_name: nginx
     env_file: .env
     networks:
       - inception-network
