@@ -26,7 +26,11 @@ RUN openssl req -new -x509 -newkey rsa:4096 \
 # - `-days 365`: Valid for 1 year
 # - `-subj`: Provide all subject info inline (Country, State, City, Org, Unit, Common Name)
 
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+RUN rm -rf /etc/nginx/sites-available/default
+COPY ./conf/nginx.conf /etc/nginx/sites-available/default
+RUN ls -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+#making a symbolic link to the default file in sites-available to site-enabled 
+
 # Replace default Nginx config with our custom config
 COPY ./tools/script.sh /script.sh
 RUN chmod +x script.sh

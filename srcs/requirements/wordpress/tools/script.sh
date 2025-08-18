@@ -2,7 +2,7 @@
 
 echo "➡️  Stage 1: Downloading WP-CLI..."
 curl -O -s https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wordpress
+chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 echo "✅ WP-CLI installed."
 
 
@@ -21,23 +21,23 @@ done
 echo "✅ MariaDB is ready."
 
 if [ ! -f "$WP_PATH/wp-load.php" ]; then
-    wordpress core download --path="$WP_PATH" --allow-root
+    wp core download --path="$WP_PATH" --allow-root
 else
     echo "✅ WordPress already present, skipping download."
 fi
 
 echo "➡️  Stage 3: Setting database configuration..."
 if [ ! -f "$WP_PATH/wp-config.php" ]; then
-    wordpress config create --allow-root --dbname="$MARIADB_DB" --dbuser="$MARIADB_USER" \
+    wp config create --allow-root --dbname="$MARIADB_DB" --dbuser="$MARIADB_USER" \
     --dbpass="$MARIADB_PASSWORD" --dbhost="$DB_HOST:$MARIADB_PORT" --path="$WP_PATH"
     echo "✅ Database config set."
 else
     echo "✅ wp-config.php already exists, skipping config."
 fi
 
-if ! wordpress core is-installed --path="$WP_PATH" --allow-root; then
+if ! wp core is-installed --path="$WP_PATH" --allow-root; then
     echo "➡️ Installing WordPress..."
-    wordpress core install --url="$DOMAINE_NAME" --title="$TITLE" \
+    wp core install --url="$DOMAINE_NAME" --title="$TITLE" \
         --admin_user="$USER_ADMIN" --admin_password="$ADMIN_PASSWORD" \
         --admin_email="$ADMIN_MAIL" --path="$WP_PATH" --allow-root
     echo "✅ WordPress installed."
@@ -45,12 +45,12 @@ else
     echo "✅ WordPress already installed, skipping."
 fi
 
-if !wp get user "$WP_USER" --field=ID --allow-root &> /dev/null;then
-    echo "➡️  Stage 4: Creating additional WordPress user..."
-    wordpress user create "$WP_USER" "$WP_USER_MAIL" --role="$ROLE" --user_pass="$USER_PASS" --path="$WP_PATH" --allow-root
+echo "➡️  Stage 4: Creating additional WordPress user..."
+if ! wp user get "$WP_USER" --field=ID --path="$WP_PATH" --allow-root &> /dev/null; then
+    wp user create "$WP_USER" "$WP_USER_MAIL" --role="$ROLE" --user_pass="$USER_PASS" --path="$WP_PATH" --allow-root
     echo "✅ WordPress user $WP_USER created."
 else
-    echo "user already created."
+    echo "user already created....."
 fi
 
 echo "➡️  Stage 5: Setting correct permissions..."
@@ -59,10 +59,10 @@ echo "✅ Permissions applied."
 
 
 echo "➡️  Stage 6: Configuring PHP-FPM to listen on TCP port 9000..."
-sed -i 's|^listen = .*|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php/7.4/fpm/pool.d/www.conf
 echo "✅ PHP-FPM configured."
 
 mkdir -p /run/php
 
 echo "➡️  Stage 7: Starting PHP-FPM..."
-exec /usr/sbin/php-fpm7.4 -F
+exec php-fpm7.4 -F

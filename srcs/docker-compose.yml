@@ -61,12 +61,12 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/aragragu/data/wp_vol
+      device: /home/aragragu/data/wordpress_volume
       o: bind
   
   mariadb-volume:
     driver: local
     driver_opts:
       type: none
-      device: /home/aragragu/data/maria_vol
+      device: /home/aragragu/data/mariadb_volume
       o: bind
