@@ -42,11 +42,11 @@ services:
     env_file: .env
     networks:
       - inception-network
-    volumes:
-      - wordpress-volume:/var/www/wordpress
     restart: always
     depends_on:
       - wordpress
+    volumes:
+      - wordpress-volume:/var/www/wordpress
     ports:
       - "443:443"
     

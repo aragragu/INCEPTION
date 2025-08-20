@@ -4,7 +4,7 @@ echo "➡️  Stage 1: Downloading WP-CLI..."
 curl -O -s https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 echo "✅ WP-CLI installed."
-
+``
 
 echo "➡️  Stage 2: Preparing WordPress directory..."
 WP_PATH='/var/www/wordpress'
@@ -14,11 +14,13 @@ echo "✅ Directory $WP_PATH ready."
 
 sleep 5
 
-echo "➡️ Waiting for MariaDB to be ready..."
-while ! mariadb -h "$DB_HOST" -u "$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DB" -e "SELECT 1;" >/dev/null 2>&1; do
-  sleep 2
-done
-echo "✅ MariaDB is ready."
+echo "➡️ Checking if MariaDB is ready..."
+if mariadb -h mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DB" -e "SELECT 1;" >/dev/null 2>&1; then
+  echo "✅ MariaDB is ready."
+else
+  echo "❌ MariaDB is not ready."
+  exit 1
+fi
 
 if [ ! -f "$WP_PATH/wp-load.php" ]; then
     wp core download --path="$WP_PATH" --allow-root
@@ -26,10 +28,11 @@ else
     echo "✅ WordPress already present, skipping download."
 fi
 
+
 echo "➡️  Stage 3: Setting database configuration..."
 if [ ! -f "$WP_PATH/wp-config.php" ]; then
     wp config create --allow-root --dbname="$MARIADB_DB" --dbuser="$MARIADB_USER" \
-    --dbpass="$MARIADB_PASSWORD" --dbhost="$DB_HOST:$MARIADB_PORT" --path="$WP_PATH"
+    --dbpass="$MARIADB_PASSWORD" --dbhost="mariadb:3306" --path="$WP_PATH"
     echo "✅ Database config set."
 else
     echo "✅ wp-config.php already exists, skipping config."

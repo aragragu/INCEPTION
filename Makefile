@@ -11,7 +11,7 @@ build:
 	@docker compose -f $(DOCKER_COMPOSE) build
 
 up: build
-	@docker compose -f $(DOCKER_COMPOSE) up -d
+	@docker compose -f $(DOCKER_COMPOSE) up
 
 down:
 	@docker compose -f $(DOCKER_COMPOSE) down -v

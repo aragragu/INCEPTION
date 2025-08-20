@@ -10,8 +10,6 @@ RUN openssl req -new -x509 -newkey rsa:4096 \
     -out /etc/nginx/ssl/certif.crt -sha256 \
     -days 365 -subj "/C=MA/ST=KH/L=KH/O=42/OU=IT/CN=aragragu.42.fr"
 
-RUN rm -rf /etc/nginx/sites-available/default
-
 COPY ./conf/nginx.conf /etc/nginx/sites-available/default
 
 COPY ./tools/script.sh /script.sh
