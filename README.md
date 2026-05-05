@@ -173,6 +173,16 @@ Nginx config highlights:
 
 ---
 
+## Docker Under the Hood
+
+For a deep-dive explanation of how Docker works internally, check out this Notion page written by me:
+
+👉 [DOCKER — inception project (Notion)](https://sable-riverbed-ddf.notion.site/DOCKER-inception-project-23a3f9fb8f71800493e0e0fdf9976a93)
+
+It covers Docker concepts and how Docker works under the hood.
+
+---
+
 ## License
 
 No license file is currently included in this repository.
