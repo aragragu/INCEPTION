@@ -175,7 +175,7 @@ Nginx config highlights:
 
 ## Docker Under the Hood
 
-For a deep-dive explanation of how Docker works internally, check out this Notion page written by the author:
+For a deep-dive explanation of how Docker works internally, check out this Notion page written by me:
 
 👉 [DOCKER — inception project (Notion)](https://sable-riverbed-ddf.notion.site/DOCKER-inception-project-23a3f9fb8f71800493e0e0fdf9976a93)
 
